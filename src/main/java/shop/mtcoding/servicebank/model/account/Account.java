@@ -49,7 +49,8 @@ public class Account {
     }
 
     @Builder
-    public Account(Long id, User user, Integer number, Integer password, Long balance, Boolean status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Account(Long id, User user, Integer number, Integer password, Long balance, Boolean status,
+            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.user = user;
         this.number = number;
@@ -78,7 +79,7 @@ public class Account {
 
     public void checkBalance(Long amount) {
         if (this.balance < amount) {
-            throw new Exception400("amount","계좌 잔액이 부족합니다");
+            throw new Exception400("amount", "계좌 잔액이 부족합니다");
         }
     }
 
