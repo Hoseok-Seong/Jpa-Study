@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.servicebank.core.exception.Exception400;
 import shop.mtcoding.servicebank.core.exception.Exception404;
+import shop.mtcoding.servicebank.core.exception.Exception500;
 import shop.mtcoding.servicebank.dto.account.AccountRequest;
 import shop.mtcoding.servicebank.dto.account.AccountResponse;
 import shop.mtcoding.servicebank.dto.user.UserResponse;
@@ -37,11 +38,16 @@ public class AccountService {
             throw new Exception400("number", "해당 계좌가 이미 존재합니다");
         }
 
-        // 3. 계좌 등록
-        Account accountPS = accountRepository.save(saveInDTO.toEntity(userPS));
+        try {
+            // 3. 계좌 등록
+            Account accountPS = accountRepository.save(saveInDTO.toEntity(userPS));
+            // 4. DTO 응답
+            return new AccountResponse.SaveOutDTO(accountPS);
+        } catch (Exception e) {
+            // log 무조건 남겨야 함
+            throw new Exception500("계좌등록 오류 : " + e.getMessage());
+        }
 
-        // 4. DTO 응답
-        return new AccountResponse.SaveOutDTO(accountPS);
     }
 
     @Transactional(readOnly = true)
